@@ -1,0 +1,20 @@
+{
+  "$schema": "https://cdn.jsdelivr.net/gh/DogeLakeDev/ScriptsForMinecraftServer@latest/modules/sdk/%40sfmc-sdk/schemas/sapi-manifest.v2.schema.json",
+  "schemaVersion": 2,
+  "id": "afk",
+  "name": "挂机检测",
+  "configKey": "afk",
+  "enabledByDefault": true,
+  "canDisable": true,
+  "requires": [],
+  "permissions": [
+    "config:read:afk",
+    "command:afk",
+    "command:noafk"
+  ],
+  "services": {
+    "provides": [],
+    "requires": []
+  },
+  "notes": "纯内存位移检测；Tag AFK/NOAFK；!afk / !noafk；≥1.0 位移解除。"
+}
