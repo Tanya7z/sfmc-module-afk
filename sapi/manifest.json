@@ -8,9 +8,7 @@
   "canDisable": true,
   "requires": [],
   "permissions": [
-    "config:read:afk",
-    "command:afk",
-    "command:noafk"
+    "config:read:afk"
   ],
   "services": {
     "provides": [],
