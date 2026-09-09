@@ -48,7 +48,10 @@ function setAfk(player: Player, afk: boolean): void {
       broadcastAll(`§a${player.name} §7已返回游戏`);
     }
   } catch (err) {
-    debug.w("AFK", `setAfk: ${err instanceof Error ? err.message : String(err)}`);
+    debug.w(
+      "AFK",
+      `setAfk: ${err instanceof Error ? err.message : String(err)}`,
+    );
   }
 }
 
@@ -101,6 +104,48 @@ function pollOnce(): void {
   }
 }
 
+function registerCommands(): void {
+  Command.register(
+    "afk",
+    "afk.use",
+    (player) => {
+      if (!player) {
+        debug.i("AFK", "该指令必须由玩家执行");
+        return;
+      }
+      const next = !player.hasTag(TAG_AFK);
+      setAfk(player, next);
+      if (!next) resetTrack(player);
+    },
+    "切换挂机状态",
+    MODULE_ID,
+  );
+
+  // 平台 Command 仅匹配首 token；对自身施加/移除 NOAFK 豁免
+  Command.register(
+    "noafk",
+    "afk.clear.other",
+    (player) => {
+      if (!player) {
+        debug.i("AFK", "该指令必须由玩家执行");
+        return;
+      }
+      if (player.hasTag(TAG_NOAFK)) {
+        player.removeTag(TAG_NOAFK);
+        Msg.success("已移除 NOAFK 豁免", player);
+      } else {
+        player.addTag(TAG_NOAFK);
+        if (player.hasTag(TAG_AFK)) player.removeTag(TAG_AFK);
+        Msg.success("已添加 NOAFK 豁免（免疫自动挂机）", player);
+      }
+    },
+    "切换自身 NOAFK 挂机豁免",
+    MODULE_ID,
+  );
+}
+
+registerCommands();
+
 ModuleRegistry.register({
   id: MODULE_ID,
   afterWorldLoad: false,
@@ -108,45 +153,6 @@ ModuleRegistry.register({
     registerPermissions() {
       Permission.register("afk.use", Permission.Member);
       Permission.register("afk.clear.other", Permission.OP);
-    },
-    registerCommands() {
-      Command.register(
-        "afk",
-        "afk.use",
-        (player) => {
-          if (!player) {
-            debug.i("AFK", "该指令必须由玩家执行");
-            return;
-          }
-          const next = !player.hasTag(TAG_AFK);
-          setAfk(player, next);
-          if (!next) resetTrack(player);
-        },
-        "切换挂机状态",
-        MODULE_ID,
-      );
-
-      // 平台 Command 仅匹配首 token；对自身施加/移除 NOAFK 豁免
-      Command.register(
-        "noafk",
-        "afk.clear.other",
-        (player) => {
-          if (!player) {
-            debug.i("AFK", "该指令必须由玩家执行");
-            return;
-          }
-          if (player.hasTag(TAG_NOAFK)) {
-            player.removeTag(TAG_NOAFK);
-            Msg.success("已移除 NOAFK 豁免", player);
-          } else {
-            player.addTag(TAG_NOAFK);
-            if (player.hasTag(TAG_AFK)) player.removeTag(TAG_AFK);
-            Msg.success("已添加 NOAFK 豁免（免疫自动挂机）", player);
-          }
-        },
-        "切换自身 NOAFK 挂机豁免",
-        MODULE_ID,
-      );
     },
     registerEvents() {
       const spawnCb = world.afterEvents.playerSpawn.subscribe((ev) => {
@@ -182,7 +188,10 @@ ModuleRegistry.register({
 
       for (const p of world.getAllPlayers()) resetTrack(p);
 
-      pollRunId = system.runInterval(() => pollOnce(), secondsToTicks(stepTimeSec));
+      pollRunId = system.runInterval(
+        () => pollOnce(),
+        secondsToTicks(stepTimeSec),
+      );
       debug.i("AFK", `init afk_time=${afkTimeSec}s step=${stepTimeSec}s`);
     },
     cleanup() {
