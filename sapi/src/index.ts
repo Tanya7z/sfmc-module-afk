@@ -108,9 +108,24 @@ function registerCommands(): void {
   Command.register(
     "afk",
     "afk.use",
-    (player) => {
+    (player, action) => {
       if (!player) {
         debug.i("AFK", "该指令必须由玩家执行");
+        return;
+      }
+      if (action === "exempt") {
+        if (!Permission.check(player, "afk.clear.other")) {
+          Msg.error("你没有切换挂机豁免的权限。", player);
+          return;
+        }
+        if (player.hasTag(TAG_NOAFK)) {
+          player.removeTag(TAG_NOAFK);
+          Msg.success("已移除 NOAFK 豁免", player);
+        } else {
+          player.addTag(TAG_NOAFK);
+          if (player.hasTag(TAG_AFK)) player.removeTag(TAG_AFK);
+          Msg.success("已添加 NOAFK 豁免（免疫自动挂机）", player);
+        }
         return;
       }
       const next = !player.hasTag(TAG_AFK);
@@ -119,28 +134,10 @@ function registerCommands(): void {
     },
     "切换挂机状态",
     MODULE_ID,
-  );
-
-  // 平台 Command 仅匹配首 token；对自身施加/移除 NOAFK 豁免
-  Command.register(
-    "noafk",
-    "afk.clear.other",
-    (player) => {
-      if (!player) {
-        debug.i("AFK", "该指令必须由玩家执行");
-        return;
-      }
-      if (player.hasTag(TAG_NOAFK)) {
-        player.removeTag(TAG_NOAFK);
-        Msg.success("已移除 NOAFK 豁免", player);
-      } else {
-        player.addTag(TAG_NOAFK);
-        if (player.hasTag(TAG_AFK)) player.removeTag(TAG_AFK);
-        Msg.success("已添加 NOAFK 豁免（免疫自动挂机）", player);
-      }
+    undefined,
+    {
+      enumParameter: { name: "action", values: ["exempt"], optional: true },
     },
-    "切换自身 NOAFK 挂机豁免",
-    MODULE_ID,
   );
 }
 
