@@ -5,9 +5,9 @@ Wave B official SFMC module: **afk**（挂机检测）.
 ## Develop
 
 ```bash
-npm install
-npm run typecheck
-npm test
+pnpm install
+pnpm run typecheck
+pnpm run test
 ```
 
 Install into platform:
