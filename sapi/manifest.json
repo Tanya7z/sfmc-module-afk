@@ -4,13 +4,11 @@
   "id": "afk",
   "name": "AFK",
   "configKey": "afk",
-  "enabledByDefault": true,
-  "canDisable": true,
   "requires": [],
   "permissions": ["config:read:afk"],
   "services": {
     "provides": [],
     "requires": []
   },
-  "notes": "纯内存位移检测；Tag AFK/NOAFK；原生 afk/noafk 命令；≥1.0 位移解除。"
+  "notes": ""
 }

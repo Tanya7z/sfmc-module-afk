@@ -1,5 +1,5 @@
 /**
- * @sfmc-bds/module-afk — 位移检测与挂机标记
+ * @sfmc-bds/module-afk
  */
 
 import { Player, system, world } from "@minecraft/server";
@@ -37,15 +37,13 @@ function setAfk(player: Player, afk: boolean): void {
   try {
     if (afk) {
       if (player.hasTag(TAG_NOAFK)) {
-        Msg.tips("你拥有 NOAFK 豁免，不会进入挂机。", player);
         return;
       }
       if (!player.hasTag(TAG_AFK)) player.addTag(TAG_AFK);
-      broadcastAll(`§e${player.name} §7进入挂机状态`);
-      Msg.tips("已进入 AFK 状态", player);
+      broadcastAll(`${player.name} §7now AFK.`);
     } else {
       if (player.hasTag(TAG_AFK)) player.removeTag(TAG_AFK);
-      broadcastAll(`§a${player.name} §7已返回游戏`);
+      broadcastAll(`${player.name} §7back to game.`);
     }
   } catch (err) {
     debug.w(
@@ -115,16 +113,16 @@ function registerCommands(): void {
       }
       if (action === "exempt") {
         if (!Permission.check(player, "afk.clear.other")) {
-          Msg.error("你没有切换挂机豁免的权限。", player);
+          Msg.error("你没有权限。", player);
           return;
         }
         if (player.hasTag(TAG_NOAFK)) {
           player.removeTag(TAG_NOAFK);
-          Msg.success("已移除 NOAFK 豁免", player);
+          Msg.success("已移除 NOAFK", player);
         } else {
           player.addTag(TAG_NOAFK);
           if (player.hasTag(TAG_AFK)) player.removeTag(TAG_AFK);
-          Msg.success("已添加 NOAFK 豁免（免疫自动挂机）", player);
+          Msg.success("已添加 NOAFK", player);
         }
         return;
       }
@@ -132,7 +130,7 @@ function registerCommands(): void {
       setAfk(player, next);
       if (!next) resetTrack(player);
     },
-    "切换挂机状态",
+    "AFK",
     MODULE_ID,
     undefined,
     {

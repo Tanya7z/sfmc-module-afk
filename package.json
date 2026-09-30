@@ -1,11 +1,11 @@
 {
   "name": "@sfmc-bds/module-afk",
-  "version": "0.2.1",
-  "packageManager": "pnpm@10.8.0",
+  "version": "0.3.0",
+  "packageManager": "pnpm@12.8.1",
   "type": "module",
-  "description": "SAPI module: 挂机检测",
+  "description": "SAPI module: AFK",
   "license": "ISC",
-  "repository": "git+https://github.com/Tanya7z/sfmc-module-afk.git",
+  "repository": "git+https://github.com/DogeLakeDev/sfmc-module-afk.git",
   "main": "sapi/src/index.ts",
   "exports": {
     ".": "./sapi/src/index.ts"
@@ -29,8 +29,8 @@
     "@minecraft/server-net": "1.0.0-beta.11940b24",
     "@minecraft/server-ui": "2.3.0-beta.1.26.51-stable",
     "@minecraft/vanilla-data": "1.26.51",
-    "@sfmc-bds/eslint-plugin": "^0.1.1-beta.3",
-    "@sfmc-bds/sdk": "^0.2.0-beta.15",
+    "@sfmc-bds/eslint-plugin": "^0.1.1",
+    "@sfmc-bds/sdk": "^0.2.0",
     "@types/node": "^22.13.0",
     "@typescript-eslint/eslint-plugin": "^8.64.0",
     "@typescript-eslint/parser": "^8.64.0",
@@ -41,7 +41,7 @@
     "typescript": "^5.6.0"
   },
   "peerDependencies": {
-    "@sfmc-bds/sdk": ">=0.2.0-beta.15"
+    "@sfmc-bds/sdk": ">=0.2.0"
   },
   "publishConfig": {
     "access": "public",

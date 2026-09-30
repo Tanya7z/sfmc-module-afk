@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { distance3, isSignificantMove, secondsToTicks } from "../sapi/src/afk-util.ts";
+import { distance3, isSignificantMove, secondsToTicks } from "../sapi/src/afk-util.js";
 
 describe("afk util", () => {
   it("distance3 欧氏距离", () => {
